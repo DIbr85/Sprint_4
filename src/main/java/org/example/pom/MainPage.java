@@ -20,6 +20,10 @@ public class MainPage {
     public MainPage(WebDriver driver) {
         this.driver = driver;
     }
+    public void open() {
+        String url = "https://qa-scooter.praktikum-services.ru/";
+        driver.get(url);
+    }
 
     public void clickButtonCookie() {
         driver.findElement(buttonCookie).click();

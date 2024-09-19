@@ -98,8 +98,9 @@ public class CreateOrderPage {
         driver.findElement(buttonConfirmOrder).click();
     }
 
-    public boolean isVisiblePopupConfirmOrder() {
-        return driver.findElement(popupConfirmOrder).isDisplayed();
+    public void waitPopupConfirmOrder() {
+        new WebDriverWait(driver, Duration.ofSeconds(3))
+                .until(ExpectedConditions.presenceOfElementLocated(popupConfirmOrder));
     }
 
     public void clickButtonYes() {
@@ -124,6 +125,8 @@ public class CreateOrderPage {
         chooseColorOfScooter();
         commentForCourier(comments);
         clickConfirmOrder();
+        waitPopupConfirmOrder();
+        clickButtonYes();
     }
 
 }

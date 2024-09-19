@@ -1,18 +1,16 @@
 import org.example.pom.CreateOrderPage;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.example.pom.MainPage;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
+
 import static org.junit.Assert.assertTrue;
 
 
 @RunWith(Parameterized.class)
 public class CreateOrderTest {
-    private WebDriver driver;
+
     private final String userFirstName;
     private final String userLastName;
     private final String userAddress;
@@ -36,42 +34,29 @@ public class CreateOrderTest {
                 {"Ли", "Сю", "Москва", "12345678910", "37.49.3024", ""}
         };
     }
-
-    @Before
-    public void setUp() {
-        driver = WebDriverManager.chromedriver().create();
-        driver.manage().window().maximize();
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-
-    }
+    @Rule
+    public BaseTest browserRule = new BaseTest();
 
     @Test
     public void testCreateOrder() {
-        CreateOrderPage objCreateOrderPage = new CreateOrderPage(driver);
-        MainPage objMainPage = new MainPage(driver);
+        CreateOrderPage objCreateOrderPage = new CreateOrderPage(browserRule.getDriver());
+        MainPage objMainPage = new MainPage(browserRule.getDriver());
+        objMainPage.open();
         objMainPage.clickButtonCookie();
         objCreateOrderPage.clickOrderButton();
         objCreateOrderPage.createOrder(userFirstName, userLastName, userAddress, userPhoneNumber, userDateDelivery, comments);
-        assertTrue(objCreateOrderPage.isVisiblePopupConfirmOrder());
-        objCreateOrderPage.clickButtonYes();
         assertTrue(objCreateOrderPage.isVisibleOrderCreated());
     }
 
     @Test
     public void testCreateOrderWithOtherOrderButton() {
-        CreateOrderPage objCreateOrderPage = new CreateOrderPage(driver);
-        MainPage objMainPage = new MainPage(driver);
+        CreateOrderPage objCreateOrderPage = new CreateOrderPage(browserRule.getDriver());
+        MainPage objMainPage = new MainPage(browserRule.getDriver());
+        objMainPage.open();
         objMainPage.clickButtonCookie();
         objCreateOrderPage.clickOtherOrderButton();
         objCreateOrderPage.createOrder(userFirstName, userLastName, userAddress, userPhoneNumber, userDateDelivery, comments);
-        assertTrue(objCreateOrderPage.isVisiblePopupConfirmOrder());
-        objCreateOrderPage.clickButtonYes();
         assertTrue(objCreateOrderPage.isVisibleOrderCreated());
-    }
-
-    @After
-    public void teardown() {
-        driver.quit();
     }
 
 }

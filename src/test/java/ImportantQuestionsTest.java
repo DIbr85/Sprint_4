@@ -1,18 +1,13 @@
 import org.example.pom.MainPage;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
+
 import java.util.List;
 
 
 @RunWith(Parameterized.class)
 public class ImportantQuestionsTest {
-    private WebDriver driver;
     private final String neededText;
 
     public ImportantQuestionsTest(String neededText) {
@@ -34,26 +29,16 @@ public class ImportantQuestionsTest {
         };
     }
 
-
-    @Before
-    public void setUp() {
-        driver = WebDriverManager.chromedriver().create();
-        driver.manage().window().maximize();
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-
-    }
+    @Rule
+    public BaseTest browserRule = new BaseTest();
 
     @Test
     public void testImportantQuestions() {
-        MainPage objListQuestions = new MainPage(driver);
+        MainPage objListQuestions = new MainPage(browserRule.getDriver());
+        objListQuestions.open();
         objListQuestions.clickButtonCookie();
         List<String> arrayTest = objListQuestions.listOfQuestions();
         Assert.assertTrue(Boolean.parseBoolean(String.valueOf(arrayTest.contains(neededText))));
     }
 
-
-    @After
-    public void teardown() {
-        driver.quit();
-    }
 }
